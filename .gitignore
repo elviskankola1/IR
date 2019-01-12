@@ -9,7 +9,6 @@ application/logs/*
 !application/*/.htaccess
 
 composer.lock
-harviacode
 
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
@@ -30,39 +29,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
-application/config/pagination.php
-application/controllers/Admin.php
-application/controllers/Cours.php
-application/controllers/Cours_enseigne.php
-application/controllers/Departement.php
-application/controllers/Etudiant.php
-application/controllers/Professeurs.php
-application/controllers/Promo_encours.php
-application/controllers/Promotion.php
-application/controllers/Recours.php
-application/controllers/Resultat_cours.php
-application/controllers/Verif_result.php
-application/models/Admin_model.php
-application/models/Cours_enseigne_model.php
-application/models/Cours_model.php
-application/models/Departement_model.php
-application/models/Etudiant_model.php
-application/models/Professeurs_model.php
-application/models/Promo_encours_model.php
-application/models/Promotion_model.php
-application/models/Recours_model.php
-application/models/Resultat_cours_model.php
-application/models/Verif_result_model.php
-application/views/admin/
-application/views/cours/
-application/views/cours_enseigne/
-application/views/departement/
-application/views/etudiant/
-application/views/professeurs/
-application/views/promo_encours/
-application/views/promotion/
-application/views/recours/
-application/views/resultat_cours/
-application/views/verif_result/
-assets/
 harviacode/
