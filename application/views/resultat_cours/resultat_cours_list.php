@@ -1,89 +1,118 @@
 <!doctype html>
 <html>
     <head>
-        <title>harviacode.com - codeigniter crud generator</title>
+        <title>Instant Result 1.0</title>
         <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css') ?>"/>
+        <link rel="stylesheet" href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css') ?>"/>
+        <link rel="stylesheet" href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css') ?>"/>
         <style>
+            .dataTables_wrapper {
+                min-height: 500px
+            }
+            
+            .dataTables_processing {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                margin-left: -50%;
+                margin-top: -25px;
+                padding-top: 20px;
+                text-align: center;
+                font-size: 1.2em;
+                color:grey;
+            }
             body{
                 padding: 15px;
             }
         </style>
     </head>
     <body>
-        <h2 style="margin-top:0px">Resultat_cours List</h2>
         <div class="row" style="margin-bottom: 10px">
             <div class="col-md-4">
-                <?php echo anchor(site_url('resultat_cours/create'),'Create', 'class="btn btn-primary"'); ?>
+                <h2 style="margin-top:0px">Resultat_cours List</h2>
             </div>
             <div class="col-md-4 text-center">
-                <div style="margin-top: 8px" id="message">
+                <div style="margin-top: 4px"  id="message">
                     <?php echo $this->session->userdata('message') <> '' ? $this->session->userdata('message') : ''; ?>
                 </div>
             </div>
-            <div class="col-md-1 text-right">
-            </div>
-            <div class="col-md-3 text-right">
-                <form action="<?php echo site_url('resultat_cours/index'); ?>" class="form-inline" method="get">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="q" value="<?php echo $q; ?>">
-                        <span class="input-group-btn">
-                            <?php 
-                                if ($q <> '')
-                                {
-                                    ?>
-                                    <a href="<?php echo site_url('resultat_cours'); ?>" class="btn btn-default">Reset</a>
-                                    <?php
-                                }
-                            ?>
-                          <button class="btn btn-primary" type="submit">Search</button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <table class="table table-bordered" style="margin-bottom: 10px">
-            <tr>
-                <th>No</th>
-		<th>IdCe</th>
-		<th>IdEtd</th>
-		<th>Td</th>
-		<th>Tp</th>
-		<th>Interro</th>
-		<th>Examen</th>
-		<th>Action</th>
-            </tr><?php
-            foreach ($resultat_cours_data as $resultat_cours)
-            {
-                ?>
-                <tr>
-			<td width="80px"><?php echo ++$start ?></td>
-			<td><?php echo $resultat_cours->idCe ?></td>
-			<td><?php echo $resultat_cours->idEtd ?></td>
-			<td><?php echo $resultat_cours->td ?></td>
-			<td><?php echo $resultat_cours->tp ?></td>
-			<td><?php echo $resultat_cours->interro ?></td>
-			<td><?php echo $resultat_cours->examen ?></td>
-			<td style="text-align:center" width="200px">
-				<?php 
-				echo anchor(site_url('resultat_cours/read/'.$resultat_cours->idRc),'Read'); 
-				echo ' | '; 
-				echo anchor(site_url('resultat_cours/update/'.$resultat_cours->idRc),'Update'); 
-				echo ' | '; 
-				echo anchor(site_url('resultat_cours/delete/'.$resultat_cours->idRc),'Delete','onclick="javasciprt: return confirm(\'Are You Sure ?\')"'); 
-				?>
-			</td>
-		</tr>
-                <?php
-            }
-            ?>
-        </table>
-        <div class="row">
-            <div class="col-md-6">
-                <a href="#" class="btn btn-primary">Total Record : <?php echo $total_rows ?></a>
+            <div class="col-md-4 text-right">
+                <?php echo anchor(site_url('resultat_cours/create'), 'Create', 'class="btn btn-primary"'); ?>
+		<?php echo anchor(site_url('resultat_cours/excel'), 'Excel', 'class="btn btn-primary"'); ?>
 	    </div>
-            <div class="col-md-6 text-right">
-                <?php echo $pagination ?>
-            </div>
         </div>
+        <table class="table table-bordered table-striped" id="mytable">
+            <thead>
+                <tr>
+                    <th width="80px">No</th>
+		    <th>IdCe</th>
+		    <th>IdEtd</th>
+		    <th>Td</th>
+		    <th>Tp</th>
+		    <th>Interro</th>
+		    <th>Examen</th>
+		    <th width="200px">Action</th>
+                </tr>
+            </thead>
+	    
+        </table>
+        <script src="<?php echo base_url('assets/js/jquery-1.11.2.min.js') ?>"></script>
+        <script src="<?php echo base_url('assets/datatables/jquery.dataTables.js') ?>"></script>
+        <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap.js') ?>"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+                {
+                    return {
+                        "iStart": oSettings._iDisplayStart,
+                        "iEnd": oSettings.fnDisplayEnd(),
+                        "iLength": oSettings._iDisplayLength,
+                        "iTotal": oSettings.fnRecordsTotal(),
+                        "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                        "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+                        "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+                    };
+                };
+
+                var t = $("#mytable").dataTable({
+                    initComplete: function() {
+                        var api = this.api();
+                        $('#mytable_filter input')
+                                .off('.DT')
+                                .on('keyup.DT', function(e) {
+                                    if (e.keyCode == 13) {
+                                        api.search(this.value).draw();
+                            }
+                        });
+                    },
+                    oLanguage: {
+                        sProcessing: "loading..."
+                    },
+                    processing: true,
+                    serverSide: true,
+                    ajax: {"url": "resultat_cours/json", "type": "POST"},
+                    columns: [
+                        {
+                            "data": "idRc",
+                            "orderable": false
+                        },{"data": "idCe"},{"data": "idEtd"},{"data": "td"},{"data": "tp"},{"data": "interro"},{"data": "examen"},
+                        {
+                            "data" : "action",
+                            "orderable": false,
+                            "className" : "text-center"
+                        }
+                    ],
+                    order: [[0, 'desc']],
+                    rowCallback: function(row, data, iDisplayIndex) {
+                        var info = this.fnPagingInfo();
+                        var page = info.iPage;
+                        var length = info.iLength;
+                        var index = page * length + (iDisplayIndex + 1);
+                        $('td:eq(0)', row).html(index);
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

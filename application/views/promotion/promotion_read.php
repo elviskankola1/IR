@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>harviacode.com - codeigniter crud generator</title>
+        <title>Instant Result 1.0</title>
         <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css') ?>"/>
         <style>
             body{
