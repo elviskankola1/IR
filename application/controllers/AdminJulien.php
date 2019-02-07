@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends CI_Controller {
+class AdminJulien extends CI_Controller {
 
 	/**
 	 * 								Tout sur l'admin
@@ -63,14 +63,14 @@ class Admin extends CI_Controller {
 
 	public function panel(){
 		if($this->session->etat){
-			redirect('admin/connect_admin_success',$username);
+			$this->load->view('admin/connect_admin_success',$username);
 		}else{
 			redirect('admin/connect_admin');
 		}
 	}
 	public function voir(){
 
-		$data['x']=$this->admin_model->voir_admin();
+		$data['x']=$this->admin_model_Julien->voir_admin();
 		$this->load->view('admin_list',$data);
 		
 	}

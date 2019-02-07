@@ -1,5 +1,5 @@
 <?php
-class Admin_model extends CI_Model{
+class Admin_model_Julien extends CI_Model{
 
     private $TableAdmin = 'admin';
     function __construct(){
